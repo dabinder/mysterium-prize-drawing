@@ -22,8 +22,8 @@ with connection.cursor(pymysql.cursors.DictCursor) as cursor:
 		entry = name_list.pop(random.randrange(len(name_list)))
 		print(
 			str(i) + ".\r\n" +
-			"Badge Name: " + entry['badge_name'] + "\r\n" +
-			"Name: " + entry['first_name'] + " " + entry['last_name']
+			f"Badge Name: {entry['badge_name']}\r\n" +
+			f"Name: {entry['first_name']} {entry['last_name']}"
 		)
 		i += 1
 		sql = f"DELETE FROM attendees WHERE id={entry['id']}"
