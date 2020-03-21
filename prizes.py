@@ -31,7 +31,7 @@ if args.import_names:
 
 #draw names and display
 cursor = connection.cursor(dictionary=True)
-sql = "SELECT id, badge_name, first_name, last_name FROM attendees"
+sql = "SELECT id, badge_name, first_name, last_name FROM attendees WHERE awarded=0"
 cursor.execute(sql)
 name_list = cursor.fetchall()
 
@@ -44,7 +44,7 @@ while len(name_list) > 0:
 		f"Name: {entry['first_name']} {entry['last_name']}"
 	)
 	i += 1
-	sql = f"DELETE FROM attendees WHERE id={entry['id']}"
+	sql = f"UPDATE attendees SET awarded=1 WHERE id={entry['id']}"
 	cursor.execute(sql)
 	connection.commit()
 	input()
