@@ -10,8 +10,6 @@ db_args = dict(
 	password='123',
 	db='prizes',
 	charset='utf8',
-	#cursor_class=MySQLCursorPrepared
-	#cursorclass=pymysql.cursors.DictCursor
 )
 parser = argparse.ArgumentParser()
 parser.add_argument('-i', '--import-names', action='store_true')
@@ -19,9 +17,9 @@ args = parser.parse_args()
 
 connection = mysql.connector.connect(**db_args)
 
+#read csv file
 if args.import_names:
 	cursor = connection.cursor(prepared=True)
-	#read csv file
 	with open ('attendees.csv') as csv_file:
 		csv_reader = csv.reader(csv_file, delimiter=',')
 		for row in csv_reader:
@@ -31,8 +29,8 @@ if args.import_names:
 		connection.commit()
 	cursor.close()
 
-cursor = connection.cursor(dictionary=True)
 #draw names and display
+cursor = connection.cursor(dictionary=True)
 sql = "SELECT id, badge_name, first_name, last_name FROM attendees"
 cursor.execute(sql)
 name_list = cursor.fetchall()
