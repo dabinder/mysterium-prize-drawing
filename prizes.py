@@ -2,7 +2,6 @@ import mysql.connector
 import random
 import csv
 import argparse
-import sys
 
 db_args = dict(
 	host='localhost',
