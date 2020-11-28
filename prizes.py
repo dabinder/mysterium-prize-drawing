@@ -1,36 +1,31 @@
-import mysql.connector
+import sqlite3
 import random
 import csv
 import argparse
 
-db_args = dict(
-	host='localhost',
-	user='prize_drawing',
-	password='123',
-	db='prizes',
-	charset='utf8',
-)
 parser = argparse.ArgumentParser()
 parser.add_argument('-i', '--import-names', action='store_true')
 args = parser.parse_args()
 
-connection = mysql.connector.connect(**db_args)
+connection = sqlite3.connect('prizes.db')
 
 #read csv file
 if args.import_names:
-	cursor = connection.cursor(prepared=True)
+	cursor = connection.cursor()
+	cursor.execute("DELETE FROM attendees")
 	with open ('attendees.csv') as csv_file:
 		csv_reader = csv.reader(csv_file, delimiter=',')
 		for row in csv_reader:
-			sql = """ INSERT INTO attendees (badge_name, first_name, last_name) VALUES (%s, %s, %s)"""
+			sql = """ INSERT INTO attendees (badge_name, first_name, last_name) VALUES (?, ?, ?)"""
 			ituple = (row[0], row[1], row[2])
 			cursor.execute(sql, ituple)
-		connection.commit()
+	connection.commit()
 	cursor.close()
 
 #draw names and display
-cursor = connection.cursor(dictionary=True)
-sql = "SELECT id, badge_name, first_name, last_name FROM attendees WHERE awarded=0"
+connection.row_factory = sqlite3.Row
+cursor = connection.cursor()
+sql = "SELECT rowid, badge_name, first_name, last_name FROM attendees WHERE awarded=0"
 cursor.execute(sql)
 name_list = cursor.fetchall()
 
@@ -43,7 +38,7 @@ while len(name_list) > 0:
 		f"Name: {entry['first_name']} {entry['last_name']}"
 	)
 	i += 1
-	sql = f"UPDATE attendees SET awarded=1 WHERE id={entry['id']}"
+	sql = f"UPDATE attendees SET awarded=1 WHERE rowid={entry['rowid']}"
 	cursor.execute(sql)
 	connection.commit()
 	input()
