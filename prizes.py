@@ -13,11 +13,11 @@ connection = sqlite3.connect('prizes.db')
 if args.import_names:
 	cursor = connection.cursor()
 	cursor.execute("DELETE FROM attendees")
-	with open ('attendees.csv') as csv_file:
+	with open ('attendees.csv', encoding="utf-8") as csv_file:
 		csv_reader = csv.reader(csv_file, delimiter=',')
 		for row in csv_reader:
-			sql = """ INSERT INTO attendees (badge_name, first_name, last_name) VALUES (?, ?, ?)"""
-			ituple = (row[0], row[1], row[2])
+			sql = """ INSERT INTO attendees (badge_number, badge_name, first_name, last_name) VALUES (?, ?, ?, ?)"""
+			ituple = (row[0], row[1], row[2], row[3])
 			cursor.execute(sql, ituple)
 	connection.commit()
 	cursor.close()
@@ -25,7 +25,7 @@ if args.import_names:
 #draw names and display
 connection.row_factory = sqlite3.Row
 cursor = connection.cursor()
-sql = "SELECT rowid, badge_name, first_name, last_name FROM attendees WHERE awarded=0"
+sql = "SELECT rowid, badge_number, badge_name, first_name, last_name FROM attendees WHERE awarded=0"
 cursor.execute(sql)
 name_list = cursor.fetchall()
 
@@ -34,6 +34,7 @@ while len(name_list) > 0:
 	entry = name_list.pop(random.randrange(len(name_list)))
 	print(
 		str(i) + ".\r\n" +
+		f"Badge Number: {entry['badge_number']}\r\n" +
 		f"Badge Name: {entry['badge_name']}\r\n" +
 		f"Name: {entry['first_name']} {entry['last_name']}"
 	)
