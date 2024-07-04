@@ -39,9 +39,11 @@ while len(name_list) > 0:
 		f"Name: {entry['first_name']} {entry['last_name']}"
 	)
 	i += 1
-	sql = f"UPDATE attendees SET awarded=1 WHERE rowid={entry['rowid']}"
+	sql = f"UPDATE attendees SET awarded=1 WHERE badge_number={entry['badge_number']}"
 	cursor.execute(sql)
 	connection.commit()
+	#also remove all other entries for this badge name
+	name_list = [item for item in name_list if item['badge_number'] != entry['badge_number']]
 	input()
 
 cursor.close()
