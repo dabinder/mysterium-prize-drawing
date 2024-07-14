@@ -6,11 +6,7 @@ Attendees previously awarded a prize will be marked and removed from the list. I
 ## Setup
 Requires SQLite (https://sqlite.org/download.html) in your PATH. Run create_db.bat to create the database and attendees table.
 
-<<<<<<< HEAD
-Replace the contents of attendees.csv with an export of this year's attendee list. The CSV file should be formatted as badge_name,first_name,last_name.
-=======
 Replace the contents of attendees.csv with an export of this year's attendee list. The CSV file should be formatted as badge_number,badge_name,first_name,last_name.
->>>>>>> 4817483e3b9861388e5a09306155679b0c00b786
 
 ## Usage
 ```
