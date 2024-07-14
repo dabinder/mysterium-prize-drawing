@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS attendees(
 	id INT PRIMARY KEY,
+	badge_number INT NULL,
 	badge_name VARCHAR(100) NOT NULL,
 	first_name VARCHAR(100) NOT NULL,
 	last_name VARCHAR(100) NOT NULL,
